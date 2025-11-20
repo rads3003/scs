@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Gestión de Contratación</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --danger-color: #ef4444;
+      --dark-color: #1e293b;
+      --light-bg: #f8fafc;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--light-bg);
+    }
+
+    .navbar {
+      background: linear-gradient(135deg, var(--primary-color) 0%, #1e40af 100%);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand,
+    .navbar-nav .nav-link {
+      color: white !important;
+      font-weight: 500;
+    }
+
+    .navbar-nav .nav-link:hover {
+      color: #e0e7ff !important;
+    }
+
+    .header-stats {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 15px;
+    }
+
+    .stat-card i {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .stat-card h3 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .stat-card p {
+      color: #64748b;
+      margin: 0;
+      font-size: 0.9rem;
+    }
+
+    .process-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      margin-bottom: 25px;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .process-card:hover {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-header-custom {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      padding: 20px;
+      border-bottom: 2px solid #e2e8f0;
+      transition: background 0.3s;
+      user-select: none;
+    }
+
+    .card-header-custom:hover {
+      background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+    }
+
+    .card-header-custom h5 {
+      margin: 0;
+      font-weight: 600;
+      color: var(--dark-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .card-header-custom .badge {
+      font-size: 0.85rem;
+      padding: 6px 12px;
+    }
+
+    .collapse-icon {
+      transition: transform 0.3s;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+    }
+
+    .collapse-icon.collapsed {
+      transform: rotate(-90deg);
+    }
+
+    .process-content {
+      transition: all 0.3s ease;
+    }
+
+    .candidate-info {
+      padding: 20px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .candidate-info .info-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .candidate-info .info-row i {
+      width: 30px;
+      color: var(--primary-color);
+    }
+
+    .stage-timeline {
+      padding: 25px;
+    }
+
+    .stage-item {
+      display: flex;
+      align-items: flex-start;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .stage-item::before {
+      content: '';
+      position: absolute;
+      left: 19px;
+      top: 45px;
+      width: 2px;
+      height: calc(100% + 12px);
+      background: #e2e8f0;
+    }
+
+    .stage-item:last-child::before {
+      display: none;
+    }
+
+    .stage-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      flex-shrink: 0;
+      font-size: 1.2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stage-content {
+      flex: 1;
+    }
+
+    .stage-approved {
+      background: #f0fdf4;
+      border-left: 4px solid var(--success-color);
+    }
+
+    .stage-approved .stage-icon {
+      background: var(--success-color);
+      color: white;
+    }
+
+    .stage-pending {
+      background: #fffbeb;
+      border-left: 4px solid var(--warning-color);
+    }
+
+    .stage-pending .stage-icon {
+      background: var(--warning-color);
+      color: white;
+    }
+
+    .stage-rejected {
+      background: #fef2f2;
+      border-left: 4px solid var(--danger-color);
+    }
+
+    .stage-rejected .stage-icon {
+      background: var(--danger-color);
+      color: white;
+    }
+
+    .stage-title {
+      font-weight: 600;
+      color: var(--dark-color);
+      margin-bottom: 5px;
+    }
+
+    .stage-meta {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+
+    .stage-actions {
+      margin-top: 10px;
+    }
+
+    .btn-action {
+      padding: 6px 16px;
+      font-size: 0.85rem;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+
+    .documents-checklist {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      border: 2px solid #e2e8f0;
+    }
+
+    .checklist-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .checklist-progress {
+      font-size: 0.9rem;
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+
+    .document-check-item {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+
+    .document-check-item:hover {
+      background: #f8fafc;
+    }
+
+    .document-check-item.checked {
+      background: #f0fdf4;
+    }
+
+    .document-check-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-right: 12px;
+      cursor: pointer;
+      accent-color: var(--success-color);
+    }
+
+    .document-check-item label {
+      flex: 1;
+      cursor: pointer;
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    .document-check-item.checked label {
+      color: #059669;
+      text-decoration: line-through;
+    }
+
+    .filter-bar {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .progress-bar-container {
+      margin-top: 15px;
+    }
+
+    .modal-content {
+      border: none;
+      border-radius: 12px;
+    }
+
+    .modal-header {
+      background: linear-gradient(135deg, var(--primary-color) 0%, #1e40af 100%);
+      color: white;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .modal-header .btn-close {
+      filter: brightness(0) invert(1);
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: var(--dark-color);
+      margin-bottom: 8px;
+    }
+
+    .form-control,
+    .form-select {
+      border-radius: 8px;
+      border: 2px solid #e2e8f0;
+      padding: 10px 15px;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #64748b;
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+
+    .mini-progress {
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .mini-progress-bar {
+      height: 100%;
+      background: var(--success-color);
+      transition: width 0.3s;
+    }
+
+    @media (max-width: 768px) {
+      .candidate-info .info-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .stage-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .stage-actions .btn {
+        width: 100%;
+      }
+
+      .card-header-custom h5 {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"><i class="bi bi-shield-check me-2"></i>Sistema de Contratación - Seguridad</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="bi bi-house-door me-1"></i>Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#newProcessModal">
+              <i class="bi bi-plus-circle me-1"></i>Nuevo Proceso
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#reportsModal">
+              <i class="bi bi-file-earmark-text me-1"></i>Reportes
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="header-stats">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="stat-card">
+            <i class="bi bi-clipboard-check text-success"></i>
+            <h3 id="statCompleted">0</h3>
+            <p>Completados</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-card">
+            <i class="bi bi-hourglass-split text-warning"></i>
+            <h3 id="statPending">0</h3>
+            <p>En Proceso</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-card">
+            <i class="bi bi-people text-primary"></i>
+            <h3 id="statTotal">0</h3>
+            <p>Total Procesos</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-card">
+            <i class="bi bi-calendar-check text-info"></i>
+            <h3 id="statThisMonth">0</h3>
+            <p>Este Mes</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <div class="row align-items-center">
+        <div class="col-md-4">
+          <input type="text" class="form-control" id="searchInput" placeholder="Buscar por nombre, RUT o ID...">
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" id="filterStatus">
+            <option value="">Todos los estados</option>
+            <option value="activo">Activos</option>
+            <option value="completado">Completados</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" id="sortBy">
+            <option value="recent">Más recientes</option>
+            <option value="name">Por nombre</option>
+            <option value="progress">Por progreso</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-outline-primary w-100" onclick="applyFilters()">
+            <i class="bi bi-funnel"></i> Filtrar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="mb-4"><i class="bi bi-list-check me-2"></i>Procesos en Curso</h2>
+    <div id="processesList"></div>
+  </div>
+
+  <div class="modal fade" id="newProcessModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-person-plus me-2"></i>Nuevo Proceso de Contratación</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="newProcessForm">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="candidateName" class="form-label">Nombre Completo del Candidato *</label>
+                <input type="text" class="form-control" id="candidateName" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="rut" class="form-label">RUT *</label>
+                <input type="text" class="form-control" id="rut" placeholder="12.345.678-9" required>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="center" class="form-label">Centro de Costo *</label>
+              <input type="text" class="form-control" id="center" required>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="phone" class="form-label">Teléfono</label>
+                <input type="text" class="form-control" id="phone" placeholder="+56 9 XXXX XXXX">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="entryDate" class="form-label">Fecha de Ingreso *</label>
+                <input type="date" class="form-control" id="entryDate" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="shift" class="form-label">Turno *</label>
+                <select class="form-select" id="shift" required>
+                  <option value="">Seleccionar turno</option>
+                  <option value="Turno de día fijo">Turno de día fijo</option>
+                  <option value="Turno de noche fijo">Turno de noche fijo</option>
+                  <option value="Turno rotativo">Turno rotativo</option>
+                  <option value="4x4">4x4</option>
+                  <option value="6x1">6x1</option>
+                </select>
+              </div>
+            </div>
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary btn-lg">
+                <i class="bi bi-check-circle me-2"></i>Crear Proceso
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="reportsModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-file-earmark-text me-2"></i>Reporte General de Procesos</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>RUT</th>
+                <th>Centro</th>
+                <th>Progreso</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="reportsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto">Notificación</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let processes = JSON.parse(localStorage.getItem('processes')) || [
+      {
+        "id": "PROC001",
+        "candidate": {
+          "name": "MARIO ANDRES GUTIERREZ BAMBARA",
+          "rut": "18146425-9",
+          "center": "CON02 14667 - MALL PLAZA BIO BIO (4X4)",
+          "phone": "+56996582630",
+          "email": "Mgutierrezb92@gmail.com"
+        },
+        "stages": [
+          { 
+            "name": "Aprobación Área de Personas", 
+            "responsible": "Sofia Sandoval", 
+            "status": "Pendiente", 
+            "date": "2024-11-15",
+            "documents": [
+              { "name": "Curriculum Vitae", "checked": true },
+              { "name": "Fotocopia de carnet por ambos lados", "checked": true },
+              { "name": "Certificado de os10 vigente", "checked": true },
+              { "name": "Certificado de antecedentes para fines especiales", "checked": true },
+              { "name": "Certificado de afiliación de Fonasa", "checked": true },
+              { "name": "Certificado de afiliación AFP", "checked": true },
+              { "name": "Certificado de cuarto medio rendido", "checked": true },
+              { "name": "Certificado de residencia", "checked": false },
+              { "name": "Test control de impulso psol (aprobado)", "checked": false }
+            ]
+          },
+          { "name": "Aprobación Área de Operaciones", "responsible": "Jorge Paredes", "status": "Aprobado", "date": "2024-11-16" },
+          { "name": "Aprobación Cliente (Mall Biobío)", "responsible": "Jorge Gálvez", "status": "Aprobado", "date": "2024-11-17" },
+          { "name": "Firma de Contrato", "date": "2024-11-18 14:00", "responsible": "Javiera Figueroa", "status": "Pendiente", "branchAuthorized": false },
+          { 
+            "name": "Firma de Documentación Prevención", 
+            "responsible": "CL-PREVENCION CONCEPCION", 
+            "status": "Pendiente",
+            "documents": [
+              { "name": "IRL", "checked": false },
+              { "name": "EPP", "checked": false },
+              { "name": "Reglamento interno", "checked": false },
+              { "name": "Capacitacion EPP", "checked": false },
+              { "name": "capacitacion Extintores", "checked": false }
+            ]
+          },
+          { "name": "Entrega de Rol de Turno", "responsible": "Jefe Seguridad Mall Plaza BioBio", "status": "Pendiente" },
+          { "name": "Retiro de Uniforme", "responsible": "nvelasquez@cta.cl", "status": "Pendiente" },
+          { "name": "Ingreso", "date": "2024-11-24", "shift": "Turno de noche fijo", "status": "Pendiente" }
+        ]
+      }
+    ];
+
+    let openProcessIds = new Set();
+
+    function saveProcesses() {
+      localStorage.setItem('processes', JSON.stringify(processes));
+    }
+
+    function validateRUT(rut) {
+      if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test(rut)) return false;
+      let tmp = rut.split('-');
+      let digv = tmp[1].toUpperCase();
+      let rutBody = tmp[0];
+      let suma = 0;
+      let multiplo = 2;
+      for (let i = rutBody.length - 1; i >= 0; i--) {
+        suma += multiplo * rutBody.charAt(i);
+        multiplo = multiplo < 7 ? multiplo + 1 : 2;
+      }
+      let dvExpected = 11 - (suma % 11);
+      dvExpected = dvExpected === 11 ? '0' : dvExpected === 10 ? 'K' : dvExpected.toString();
+      return dvExpected === digv;
+    }
+
+    document.getElementById('newProcessForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('candidateName').value.trim();
+      const rut = document.getElementById('rut').value.trim();
+      const center = document.getElementById('center').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const entryDate = document.getElementById('entryDate').value;
+      const shift = document.getElementById('shift').value;
+
+      if (!name || !rut || !center || !entryDate || !shift) {
+        showToast('Por favor, completa todos los campos requeridos.');
+        return;
+      }
+      if (!validateRUT(rut)) {
+        showToast('RUT inválido. Verifica el formato (ej: 12.345.678-9).');
+        return;
+      }
+
+      const newId = 'PROC' + (processes.length + 1).toString().padStart(3, '0');
+      const newProcess = {
+        id: newId,
+        candidate: { name, rut, center, phone, email },
+        stages: [
+          { 
+            name: "Aprobación Área de Personas", 
+            responsible: "Sofia Sandoval", 
+            status: "Pendiente", 
+            date: new Date().toISOString().split('T')[0],
+            documents: [
+              { name: "Curriculum Vitae", checked: false },
+              { name: "Fotocopia de carnet por ambos lados", checked: false },
+              { name: "Certificado de os10 vigente", checked: false },
+              { name: "Certificado de antecedentes para fines especiales", checked: false },
+              { name: "Certificado de afiliación de Fonasa", checked: false },
+              { name: "Certificado de afiliación AFP", checked: false },
+              { name: "Certificado de cuarto medio rendido", checked: false },
+              { name: "Certificado de residencia", checked: false },
+              { name: "Test control de impulso psol (aprobado)", checked: false }
+            ]
+          },
+          { name: "Aprobación Área de Operaciones", responsible: "Jorge Paredes", status: "Pendiente", date: "" },
+          { name: "Aprobación Cliente", responsible: "", status: "Pendiente", date: "" },
+          { name: "Firma de Contrato", date: entryDate, responsible: "", status: "Pendiente", branchAuthorized: false },
+          { 
+            name: "Firma de Documentación Prevención", 
+            responsible: "", 
+            status: "Pendiente",
+            documents: [
+              { name: "IRL", checked: false },
+              { name: "EPP", checked: false },
+              { name: "Reglamento interno", checked: false },
+              { name: "Capacitacion EPP", checked: false },
+              { name: "capacitacion Extintores", checked: false }
+            ]
+          },
+          { name: "Entrega de Rol de Turno", responsible: "", status: "Pendiente" },
+          { name: "Retiro de Uniforme", responsible: "", status: "Pendiente" },
+          { name: "Ingreso", date: entryDate, shift: shift, status: "Pendiente" }
+        ]
+      };
+      processes.push(newProcess);
+      saveProcesses();
+      updateStats();
+      renderProcesses();
+      bootstrap.Modal.getInstance(document.getElementById('newProcessModal')).hide();
+      showToast('Proceso creado exitosamente.');
+    });
+
+    function applyFilters() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const statusFilter = document.getElementById('filterStatus').value;
+      const sortBy = document.getElementById('sortBy').value;
+
+      let filtered = processes.filter(proc => {
+        const isMatch = proc.candidate.name.toLowerCase().includes(search) ||
+                        proc.candidate.rut.toLowerCase().includes(search) ||
+                        proc.id.toLowerCase().includes(search);
+        const progress = calculateProgress(proc);
+        const procStatus = progress === 100 ? 'completado' : 'activo';
+        return isMatch && (!statusFilter || procStatus === statusFilter);
+      });
+
+      if (sortBy === 'recent') {
+        filtered.sort((a, b) => new Date(b.stages[0].date) - new Date(a.stages[0].date));
+      } else if (sortBy === 'name') {
+        filtered.sort((a, b) => a.candidate.name.localeCompare(b.candidate.name));
+      } else if (sortBy === 'progress') {
+        filtered.sort((a, b) => calculateProgress(b) - calculateProgress(a));
+      }
+
+      renderFilteredProcesses(filtered);
+    }
+
+    function renderProcesses() {
+      renderFilteredProcesses(processes);
+    }
+
+    function renderFilteredProcesses(filtered) {
+      const list = document.getElementById('processesList');
+      list.innerHTML = '';
+
+      if (filtered.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <i class="bi bi-inbox"></i>
+            <h4>No hay procesos registrados</h4>
+            <p>Comienza creando un nuevo proceso de contratación</p>
+            <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#newProcessModal">
+              <i class="bi bi-plus-circle me-2"></i>Crear Primer Proceso
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      const currentOpenIds = new Set([...openProcessIds]);
+
+      filtered.forEach((proc) => {
+        const progress = calculateProgress(proc);
+
+        const card = document.createElement('div');
+        card.className = 'process-card';
+        card.innerHTML = `
+          <div class="card-header-custom">
+            <div class="d-flex justify-content-between align-items-center w-100">
+              <div class="d-flex align-items-center flex-grow-1">
+                <i class="bi bi-chevron-down collapse-icon me-3 ${currentOpenIds.has(proc.id) ? '' : 'collapsed'}" id="icon${proc.id}"></i>
+                <div>
+                  <h5 class="mb-1" onclick="toggleProcess('collapse${proc.id}', '${proc.id}')"><i class="bi bi-person-badge me-2"></i>${proc.candidate.name}</h5>
+                  <small class="text-muted">ID: ${proc.id}</small>
+                  <div class="mini-progress">
+                    <div class="mini-progress-bar" style="width: ${progress}%"></div>
+                  </div>
+                </div>
+              </div>
+              <span class="badge ${progress === 100 ? 'bg-success' : 'bg-warning'}">
+                ${progress === 100 ? 'Completado' : progress + '%'}
+              </span>
+              <button class="btn btn-danger btn-sm ms-2" onclick="deleteProcess('${proc.id}')"><i class="bi bi-trash"></i></button>
+            </div>
+          </div>
+          
+          <div class="collapse process-content ${currentOpenIds.has(proc.id) ? 'show' : ''}" id="collapse${proc.id}">
+            ${currentOpenIds.has(proc.id) ? generateProcessContent(proc) : ''}
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function generateProcessContent(proc) {
+      const completed = proc.stages.filter(s => s.status === 'Aprobado').length;
+      const total = proc.stages.length;
+
+      return `
+        <div class="candidate-info">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="info-row"><i class="bi bi-card-text"></i><strong>RUT:</strong> ${proc.candidate.rut}</div>
+              <div class="info-row"><i class="bi bi-telephone"></i><strong>Teléfono:</strong> ${proc.candidate.phone || 'N/A'}</div>
+            </div>
+            <div class="col-md-6">
+              <div class="info-row"><i class="bi bi-envelope"></i><strong>Email:</strong> ${proc.candidate.email || 'N/A'}</div>
+              <div class="info-row"><i class="bi bi-building"></i><strong>Centro:</strong> ${proc.candidate.center}</div>
+            </div>
+          </div>
+          <div class="progress-bar-container">
+            <div class="d-flex justify-content-between mb-1">
+              <small><strong>Progreso General</strong></small>
+              <small><strong>${completed}/${total} etapas</strong></small>
+            </div>
+            <div class="progress" style="height: 8px;">
+              <div class="progress-bar ${completed / total * 100 === 100 ? 'bg-success' : 'bg-primary'}" 
+                   style="width: ${completed / total * 100}%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stage-timeline">
+          ${proc.stages.map((stage, stageIndex) => `
+            <div class="stage-item ${getStageClass(stage.status)}">
+              <div class="stage-icon">
+                <i class="bi ${getStageIcon(stage.status)}"></i>
+              </div>
+              <div class="stage-content">
+                <div class="stage-title">${stage.name}</div>
+                <div class="stage-meta">
+                  ${stage.responsible ? `<i class="bi bi-person me-1"></i>${stage.responsible}` : ''}
+                  ${stage.date ? `<i class="bi bi-calendar ms-3 me-1"></i>${stage.date}` : ''}
+                  ${stage.shift ? `<i class="bi bi-clock ms-3 me-1"></i>${stage.shift}` : ''}
+                </div>
+                ${stage.name === 'Firma de Contrato' ? renderBranchAuthorization(proc.id, stageIndex, stage) : ''}
+                ${stage.documents ? renderDocumentChecklist(proc.id, stageIndex, stage) : ''}
+                ${!stage.documents && stage.status === 'Pendiente' && stage.name !== 'Firma de Contrato' ? `
+                  <div class="stage-actions">
+                    <button class="btn btn-success btn-action btn-sm" onclick="updateStatus('${proc.id}', ${stageIndex}, 'Aprobado')">
+                      <i class="bi bi-check-circle me-1"></i>Aprobar
+                    </button>
+                    <button class="btn btn-danger btn-action btn-sm ms-2" onclick="updateStatus('${proc.id}', ${stageIndex}, 'Rechazado')">
+                      <i class="bi bi-x-circle me-1"></i>Rechazar
+                    </button>
+                  </div>
+                ` : ''}
+                ${stage.name === 'Firma de Contrato' && stage.status === 'Pendiente' ? `
+                  <div class="stage-actions">
+                    <button class="btn btn-primary btn-action btn-sm" onclick="authorizeBranch('${proc.id}', ${stageIndex})">
+                      <i class="bi bi-lock me-1"></i>Autorizar Branch
+                    </button>
+                    <button class="btn btn-success btn-action btn-sm ms-2" onclick="updateStatus('${proc.id}', ${stageIndex}, 'Aprobado')" ${stage.branchAuthorized ? '' : 'disabled'}>
+                      <i class="bi bi-check-circle me-1"></i>Aprobar
+                    </button>
+                    <button class="btn btn-danger btn-action btn-sm ms-2" onclick="updateStatus('${proc.id}', ${stageIndex}, 'Rechazado')">
+                      <i class="bi bi-x-circle me-1"></i>Rechazar
+                    </button>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function renderBranchAuthorization(procId, stageIndex, stage) {
+      return `
+        <div class="documents-checklist">
+          <div class="checklist-header">
+            <strong><i class="bi bi-key me-2"></i>Autorización Branch</strong>
+            <span class="checklist-progress">${stage.branchAuthorized ? 'Autorizado' : 'Pendiente'}</span>
+          </div>
+          <div class="document-check-item ${stage.branchAuthorized ? 'checked' : ''}">
+            <input type="checkbox" disabled ${stage.branchAuthorized ? 'checked' : ''}>
+            <label>Autorización validada por el Branch Manager</label>
+            ${stage.branchAuthorized ? '<i class="bi bi-check-circle-fill text-success"></i>' : '<i class="bi bi-circle text-muted"></i>'}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderDocumentChecklist(procId, stageIndex, stage) {
+      const checkedCount = stage.documents.filter(d => d.checked).length;
+      const totalCount = stage.documents.length;
+      const checklistProgress = Math.round((checkedCount / totalCount) * 100);
+
+      return `
+        <div class="documents-checklist">
+          <div class="checklist-header">
+            <strong><i class="bi bi-paperclip me-2"></i>Documentos Requeridos</strong>
+            <span class="checklist-progress">${checkedCount}/${totalCount} completados (${checklistProgress}%)</span>
+          </div>
+          ${stage.documents.map((doc, docIndex) => `
+            <div class="document-check-item ${doc.checked ? 'checked' : ''}" onclick="event.stopPropagation()">
+              <input type="checkbox" 
+                     id="doc_${procId}_${stageIndex}_${docIndex}" 
+                     ${doc.checked ? 'checked' : ''}
+                     onchange="toggleDocument('${procId}', ${stageIndex}, ${docIndex})">
+              <label for="doc_${procId}_${stageIndex}_${docIndex}">${doc.name}</label>
+              ${doc.checked ? '<i class="bi bi-check-circle-fill text-success"></i>' : '<i class="bi bi-circle text-muted"></i>'}
+            </div>
+          `).join('')}
+          <div class="mt-3">
+            <div class="progress" style="height: 8px;">
+              <div class="progress-bar bg-success" style="width: ${checklistProgress}%"></div>
+            </div>
+          </div>
+          ${stage.status === 'Pendiente' ? `
+            <div class="stage-actions mt-3">
+              <button class="btn btn-success btn-action btn-sm" onclick="updateStatus('${procId}', ${stageIndex}, 'Aprobado')">
+                <i class="bi bi-check-circle me-1"></i>Aprobar
+              </button>
+              <button class="btn btn-danger btn-action btn-sm ms-2" onclick="updateStatus('${procId}', ${stageIndex}, 'Rechazado')">
+                <i class="bi bi-x-circle me-1"></i>Rechazar
+              </button>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    function toggleProcess(collapseId, procId) {
+      const collapse = document.getElementById(collapseId);
+      const icon = document.getElementById('icon' + procId);
+      const bsCollapse = bootstrap.Collapse.getOrCreateInstance(collapse, { toggle: false });
+      const isShowing = collapse.classList.contains('show');
+
+      if (isShowing) {
+        bsCollapse.hide();
+        icon.classList.add('collapsed');
+        openProcessIds.delete(procId);
+      } else {
+        const proc = processes.find(p => p.id === procId);
+        if (proc) {
+          collapse.innerHTML = generateProcessContent(proc);
+        }
+        bsCollapse.show();
+        icon.classList.remove('collapsed');
+        openProcessIds.add(procId);
+      }
+    }
+
+    function toggleDocument(procId, stageIndex, docIndex) {
+      const proc = processes.find(p => p.id === procId);
+      if (proc) {
+        proc.stages[stageIndex].documents[docIndex].checked = !proc.stages[stageIndex].documents[docIndex].checked;
+        saveProcesses();
+        updateStats();
+        const collapse = document.getElementById('collapse' + procId);
+        if (collapse && collapse.classList.contains('show')) {
+          collapse.innerHTML = generateProcessContent(proc);
+        }
+        showToast('Documento actualizado.');
+      }
+    }
+
+    function authorizeBranch(procId, stageIndex) {
+      const code = prompt('Ingrese el código de autorización del Branch:');
+      if (code === 'BM00') {
+        const proc = processes.find(p => p.id === procId);
+        if (proc) {
+          proc.stages[stageIndex].branchAuthorized = true;
+          saveProcesses();
+          const collapse = document.getElementById('collapse' + procId);
+          if (collapse && collapse.classList.contains('show')) {
+            collapse.innerHTML = generateProcessContent(proc);
+          }
+          showToast('Autorización Branch validada exitosamente.');
+        }
+      } else {
+        showToast('Código incorrecto. Autorización denegada.');
+      }
+    }
+
+    function getStageClass(status) {
+      if (status === 'Aprobado') return 'stage-approved';
+      if (status === 'Pendiente') return 'stage-pending';
+      if (status === 'Rechazado') return 'stage-rejected';
+      return '';
+    }
+
+    function getStageIcon(status) {
+      if (status === 'Aprobado') return 'bi-check-circle-fill';
+      if (status === 'Pendiente') return 'bi-clock-fill';
+      if (status === 'Rechazado') return 'bi-x-circle-fill';
+      return 'bi-circle';
+    }
+
+    function updateStatus(procId, stageIndex, newStatus) {
+      const proc = processes.find(p => p.id === procId);
+      if (proc) {
+        const stage = proc.stages[stageIndex];
+        if (stage.name === 'Firma de Contrato' && newStatus === 'Aprobado' && !stage.branchAuthorized) {
+          showToast('No se puede aprobar sin autorización del Branch.');
+          return;
+        }
+        proc.stages[stageIndex].status = newStatus;
+        proc.stages[stageIndex].date = new Date().toISOString().split('T')[0];
+        saveProcesses();
+        updateStats();
+        const collapse = document.getElementById('collapse' + procId);
+        if (collapse && collapse.classList.contains('show')) {
+          collapse.innerHTML = generateProcessContent(proc);
+        }
+        showToast(`Etapa actualizada a ${newStatus}.`);
+      }
+    }
+
+    function deleteProcess(procId) {
+      if (confirm('¿Estás seguro de que deseas eliminar este proceso?')) {
+        processes = processes.filter(p => p.id !== procId);
+        saveProcesses();
+        openProcessIds.delete(procId);
+        updateStats();
+        renderProcesses();
+        showToast('Proceso eliminado exitosamente.');
+      }
+    }
+
+    function calculateProgress(proc) {
+      const completed = proc.stages.filter(s => s.status === 'Aprobado').length;
+      return Math.round((completed / proc.stages.length) * 100);
+    }
+
+    function updateStats() {
+      const completed = processes.filter(p => calculateProgress(p) === 100).length;
+      const pending = processes.length - completed;
+      const total = processes.length;
+      const thisMonth = processes.filter(p => {
+        const date = new Date(p.stages[0].date);
+        return date.getMonth() === new Date().getMonth() && date.getFullYear() === new Date().getFullYear();
+      }).length;
+
+      document.getElementById('statCompleted').textContent = completed;
+      document.getElementById('statPending').textContent = pending;
+      document.getElementById('statTotal').textContent = total;
+      document.getElementById('statThisMonth').textContent = thisMonth;
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('liveToast');
+      toast.querySelector('.toast-body').textContent = message;
+      bootstrap.Toast.getOrCreateInstance(toast).show();
+    }
+
+    function renderReportsTable() {
+      const tableBody = document.getElementById('reportsTableBody');
+      tableBody.innerHTML = '';
+      processes.forEach(proc => {
+        const progress = calculateProgress(proc);
+        const status = progress === 100 ? 'Completado' : 'Activo';
+        const row = `<tr>
+          <td>${proc.id}</td>
+          <td>${proc.candidate.name}</td>
+          <td>${proc.candidate.rut}</td>
+          <td>${proc.candidate.center}</td>
+          <td>${progress}%</td>
+          <td>${status}</td>
+        </tr>`;
+        tableBody.innerHTML += row;
+      });
+    }
+
+    const reportsModal = document.getElementById('reportsModal');
+    reportsModal.addEventListener('show.bs.modal', function () {
+      renderReportsTable();
+    });
+
+    renderProcesses();
+    updateStats();
+  </script>
+</body>
+
+</html>
