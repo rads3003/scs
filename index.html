@@ -99,7 +99,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      cursor: pointer;
+      /* Eliminado el cursor pointer de aquí, se añade al div contenedor */
     }
 
     .card-header-custom .badge {
@@ -370,6 +370,11 @@
       transition: width 0.3s;
     }
 
+    .branch-flag {
+      font-size: 1.2rem;
+      margin-left: 8px;
+    }
+
     @media (max-width: 768px) {
       .candidate-info .info-row {
         flex-direction: column;
@@ -396,7 +401,7 @@
 <body>
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#"><i class="bi bi-shield-check me-2"></i>Sistema de Contratación - Seguridad</a>
+      <a class="navbar-brand" href="#"><i class="bi bi-shield-check me-2"></i>SGC Sistema de Gestión de Contratación - Secutitas Concepción</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -598,7 +603,7 @@
           { 
             "name": "Aprobación Área de Personas", 
             "responsible": "Sofia Sandoval", 
-            "status": "Pendiente", 
+            "status": "Aprobado",
             "date": "2024-11-15",
             "documents": [
               { "name": "Curriculum Vitae", "checked": true },
@@ -612,8 +617,9 @@
               { "name": "Test control de impulso psol (aprobado)", "checked": false }
             ]
           },
-          { "name": "Aprobación Área de Operaciones", "responsible": "Jorge Paredes", "status": "Aprobado", "date": "2024-11-16" },
-          { "name": "Aprobación Cliente (Mall Biobío)", "responsible": "Jorge Gálvez", "status": "Aprobado", "date": "2024-11-17" },
+          // ETAPA CON OBSERVACIONES
+          { "name": "Aprobación Área de Operaciones", "responsible": "Jorge Paredes", "status": "Aprobado", "date": "2024-11-16", "comments": "El candidato cumple con el perfil requerido para 4x4." },
+          { "name": "Aprobación Cliente (Mall Biobío)", "responsible": "Jorge Gálvez", "status": "Pendiente", "date": "" },
           { "name": "Firma de Contrato", "date": "2024-11-18 14:00", "responsible": "Javiera Figueroa", "status": "Pendiente", "branchAuthorized": false },
           { 
             "name": "Firma de Documentación Prevención", 
@@ -627,9 +633,57 @@
               { "name": "capacitacion Extintores", "checked": false }
             ]
           },
-          { "name": "Entrega de Rol de Turno", "responsible": "Jefe Seguridad Mall Plaza BioBio", "status": "Pendiente" },
-          { "name": "Retiro de Uniforme", "responsible": "nvelasquez@cta.cl", "status": "Pendiente" },
+          { "name": "Entrega de Rol de Turno", "responsible": "Jefe Seguridad Mall Plaza BioBio", "status": "Pendiente", "date": "" },
+          { "name": "Retiro de Uniforme", "responsible": "nvelasquez@cta.cl", "status": "Pendiente", "date": "" },
           { "name": "Ingreso", "date": "2024-11-24", "shift": "Turno de noche fijo", "status": "Pendiente" }
+        ]
+      },
+      {
+        "id": "PROC002",
+        "candidate": {
+          "name": "ANA MARIA PEREZ RIOS",
+          "rut": "15345678-0",
+          "center": "SAN05 22110 - SUPERMERCADO LIDER (6X1)",
+          "phone": "+56987654321",
+          "email": "ana.perez@example.com"
+        },
+        "stages": [
+          { 
+            "name": "Aprobación Área de Personas", 
+            "responsible": "Sofia Sandoval", 
+            "status": "Pendiente", 
+            "date": "2024-11-20",
+            "documents": [
+              { "name": "Curriculum Vitae", "checked": true },
+              { "name": "Fotocopia de carnet por ambos lados", "checked": false },
+              { "name": "Certificado de os10 vigente", "checked": false },
+              { "name": "Certificado de antecedentes para fines especiales", "checked": false },
+              { "name": "Certificado de afiliación de Fonasa", "checked": false },
+              { "name": "Certificado de afiliación AFP", "checked": false },
+              { "name": "Certificado de cuarto medio rendido", "checked": false },
+              { "name": "Certificado de residencia", "checked": false },
+              { "name": "Test control de impulso psol (aprobado)", "checked": false }
+            ]
+          },
+          // ETAPA CON OBSERVACIONES
+          { "name": "Aprobación Área de Operaciones", "responsible": "Jorge Paredes", "status": "Pendiente", "date": "", "comments": "" },
+          { "name": "Aprobación Cliente", "responsible": "", "status": "Pendiente", "date": "" },
+          { "name": "Firma de Contrato", "date": "2024-11-30", "responsible": "", "status": "Pendiente", "branchAuthorized": false },
+          { 
+            "name": "Firma de Documentación Prevención", 
+            "responsible": "", 
+            "status": "Pendiente",
+            "documents": [
+              { "name": "IRL", "checked": false },
+              { "name": "EPP", "checked": false },
+              { "name": "Reglamento interno", "checked": false },
+              { "name": "Capacitacion EPP", "checked": false },
+              { "name": "capacitacion Extintores", "checked": false }
+            ]
+          },
+          { "name": "Entrega de Rol de Turno", "responsible": "", "status": "Pendiente", "date": "" },
+          { "name": "Retiro de Uniforme", "responsible": "", "status": "Pendiente", "date": "" },
+          { "name": "Ingreso", "date": "2024-11-30", "shift": "Turno de día fijo", "status": "Pendiente" }
         ]
       }
     ];
@@ -697,7 +751,8 @@
               { name: "Test control de impulso psol (aprobado)", checked: false }
             ]
           },
-          { name: "Aprobación Área de Operaciones", responsible: "Jorge Paredes", status: "Pendiente", date: "" },
+          // ETAPA CON OBSERVACIONES
+          { name: "Aprobación Área de Operaciones", responsible: "Jorge Paredes", status: "Pendiente", date: "", comments: "" },
           { name: "Aprobación Cliente", responsible: "", status: "Pendiente", date: "" },
           { name: "Firma de Contrato", date: entryDate, responsible: "", status: "Pendiente", branchAuthorized: false },
           { 
@@ -712,8 +767,8 @@
               { name: "capacitacion Extintores", checked: false }
             ]
           },
-          { name: "Entrega de Rol de Turno", responsible: "", status: "Pendiente" },
-          { name: "Retiro de Uniforme", responsible: "", status: "Pendiente" },
+          { name: "Entrega de Rol de Turno", responsible: "", status: "Pendiente", date: "" },
+          { name: "Retiro de Uniforme", responsible: "", status: "Pendiente", date: "" },
           { name: "Ingreso", date: entryDate, shift: shift, status: "Pendiente" }
         ]
       };
@@ -722,6 +777,10 @@
       updateStats();
       renderProcesses();
       bootstrap.Modal.getInstance(document.getElementById('newProcessModal')).hide();
+      
+      // FIX 1: Resetear el formulario después de la creación
+      e.target.reset(); 
+
       showToast('Proceso creado exitosamente.');
     });
 
@@ -754,6 +813,11 @@
       renderFilteredProcesses(processes);
     }
 
+    function needsBranchValidation(proc) {
+      const contractStage = proc.stages.find(stage => stage.name === 'Firma de Contrato');
+      return contractStage && contractStage.status === 'Pendiente' && !contractStage.branchAuthorized;
+    }
+
     function renderFilteredProcesses(filtered) {
       const list = document.getElementById('processesList');
       list.innerHTML = '';
@@ -776,27 +840,31 @@
 
       filtered.forEach((proc) => {
         const progress = calculateProgress(proc);
+        const needsValidation = needsBranchValidation(proc);
 
         const card = document.createElement('div');
         card.className = 'process-card';
         card.innerHTML = `
           <div class="card-header-custom">
-            <div class="d-flex justify-content-between align-items-center w-100">
+            <div class="d-flex justify-content-between align-items-center w-100" onclick="toggleProcess('collapse${proc.id}', '${proc.id}')" style="cursor: pointer;">
               <div class="d-flex align-items-center flex-grow-1">
                 <i class="bi bi-chevron-down collapse-icon me-3 ${currentOpenIds.has(proc.id) ? '' : 'collapsed'}" id="icon${proc.id}"></i>
                 <div>
-                  <h5 class="mb-1" onclick="toggleProcess('collapse${proc.id}', '${proc.id}')"><i class="bi bi-person-badge me-2"></i>${proc.candidate.name}</h5>
-                  <small class="text-muted">ID: ${proc.id}</small>
+                  <h5 class="mb-1"><i class="bi bi-person-badge me-2"></i>${proc.candidate.name}</h5>
+                  <small class="text-muted">ID: ${proc.id} | Centro de Costo: ${proc.candidate.center}</small>
                   <div class="mini-progress">
                     <div class="mini-progress-bar" style="width: ${progress}%"></div>
                   </div>
                 </div>
               </div>
-              <span class="badge ${progress === 100 ? 'bg-success' : 'bg-warning'}">
-                ${progress === 100 ? 'Completado' : progress + '%'}
-              </span>
-              <button class="btn btn-danger btn-sm ms-2" onclick="deleteProcess('${proc.id}')"><i class="bi bi-trash"></i></button>
+              <div class="d-flex align-items-center">
+                <span class="badge ${progress === 100 ? 'bg-success' : 'bg-warning'}">
+                  ${progress === 100 ? 'Completado' : progress + '%'}
+                </span>
+                ${needsValidation ? '<i class="bi bi-flag-fill text-danger branch-flag" title="Requiere validación Branch Manager"></i>' : ''}
+              </div>
             </div>
+            <button class="btn btn-danger btn-sm ms-2 mt-2" onclick="deleteProcess('${proc.id}')"><i class="bi bi-trash"></i> Eliminar</button>
           </div>
           
           <div class="collapse process-content ${currentOpenIds.has(proc.id) ? 'show' : ''}" id="collapse${proc.id}">
@@ -808,6 +876,7 @@
     }
 
     function generateProcessContent(proc) {
+      // El progreso que se muestra aquí es INDIVIDUAL para 'proc'
       const completed = proc.stages.filter(s => s.status === 'Aprobado').length;
       const total = proc.stages.length;
 
@@ -825,7 +894,7 @@
           </div>
           <div class="progress-bar-container">
             <div class="d-flex justify-content-between mb-1">
-              <small><strong>Progreso General</strong></small>
+              <small><strong>Progreso General (Individual)</strong></small>
               <small><strong>${completed}/${total} etapas</strong></small>
             </div>
             <div class="progress" style="height: 8px;">
@@ -848,6 +917,9 @@
                   ${stage.date ? `<i class="bi bi-calendar ms-3 me-1"></i>${stage.date}` : ''}
                   ${stage.shift ? `<i class="bi bi-clock ms-3 me-1"></i>${stage.shift}` : ''}
                 </div>
+                
+                ${stage.name === 'Aprobación Área de Operaciones' ? renderOperationsComment(proc.id, stageIndex, stage) : ''}
+
                 ${stage.name === 'Firma de Contrato' ? renderBranchAuthorization(proc.id, stageIndex, stage) : ''}
                 ${stage.documents ? renderDocumentChecklist(proc.id, stageIndex, stage) : ''}
                 ${!stage.documents && stage.status === 'Pendiente' && stage.name !== 'Firma de Contrato' ? `
@@ -876,6 +948,25 @@
               </div>
             </div>
           `).join('')}
+        </div>
+      `;
+    }
+
+    function renderOperationsComment(procId, stageIndex, stage) {
+      const isApprovedOrRejected = stage.status === 'Aprobado' || stage.status === 'Rechazado';
+      
+      return `
+        <div class="mt-3">
+          <label for="op_obs_${procId}_${stageIndex}" class="form-label small text-muted">Observaciones del Área de Operaciones</label>
+          <textarea class="form-control" 
+                    id="op_obs_${procId}_${stageIndex}" 
+                    rows="3" 
+                    placeholder="Ingrese las observaciones aquí..."
+                    onchange="updateComment('${procId}', ${stageIndex}, this.value)"
+                    ${isApprovedOrRejected ? 'disabled' : ''}
+          >${stage.comments || ''}</textarea>
+          
+          ${stage.comments && isApprovedOrRejected ? `<p class="mt-1 small text-info">Observación registrada: ${stage.comments}</p>` : ''}
         </div>
       `;
     }
@@ -947,6 +1038,7 @@
         icon.classList.add('collapsed');
         openProcessIds.delete(procId);
       } else {
+        // FIX 2: Reafirmamos que al abrir, se carga el contenido EXACTO del proceso.
         const proc = processes.find(p => p.id === procId);
         if (proc) {
           collapse.innerHTML = generateProcessContent(proc);
@@ -954,6 +1046,15 @@
         bsCollapse.show();
         icon.classList.remove('collapsed');
         openProcessIds.add(procId);
+      }
+    }
+
+    function updateComment(procId, stageIndex, comment) {
+      const proc = processes.find(p => p.id === procId);
+      if (proc) {
+        proc.stages[stageIndex].comments = comment;
+        saveProcesses();
+        showToast('Observación de Operaciones guardada.');
       }
     }
 
@@ -982,6 +1083,7 @@
           if (collapse && collapse.classList.contains('show')) {
             collapse.innerHTML = generateProcessContent(proc);
           }
+          renderProcesses();
           showToast('Autorización Branch validada exitosamente.');
         }
       } else {
@@ -1011,14 +1113,19 @@
           showToast('No se puede aprobar sin autorización del Branch.');
           return;
         }
+
+        // Se actualiza el estado y la fecha de aprobación/rechazo para la cronología
         proc.stages[stageIndex].status = newStatus;
         proc.stages[stageIndex].date = new Date().toISOString().split('T')[0];
         saveProcesses();
         updateStats();
         const collapse = document.getElementById('collapse' + procId);
         if (collapse && collapse.classList.contains('show')) {
+          // Re-renderiza SOLO el contenido del proceso afectado.
           collapse.innerHTML = generateProcessContent(proc);
         }
+        // Se regeneran las tarjetas por si el badge del encabezado cambió
+        renderProcesses();
         showToast(`Etapa actualizada a ${newStatus}.`);
       }
     }
@@ -1035,11 +1142,13 @@
     }
 
     function calculateProgress(proc) {
+      // Función que calcula el progreso INDIVIDUAL
       const completed = proc.stages.filter(s => s.status === 'Aprobado').length;
       return Math.round((completed / proc.stages.length) * 100);
     }
 
     function updateStats() {
+      // Función que calcula el progreso GLOBAL (para las estadísticas superiores)
       const completed = processes.filter(p => calculateProgress(p) === 100).length;
       const pending = processes.length - completed;
       const total = processes.length;
@@ -1077,6 +1186,12 @@
         tableBody.innerHTML += row;
       });
     }
+
+    // Listener para resetear el formulario al cerrar el modal (prevención de datos antiguos)
+    const newProcessModal = document.getElementById('newProcessModal');
+    newProcessModal.addEventListener('hidden.bs.modal', function () {
+        document.getElementById('newProcessForm').reset();
+    });
 
     const reportsModal = document.getElementById('reportsModal');
     reportsModal.addEventListener('show.bs.modal', function () {
